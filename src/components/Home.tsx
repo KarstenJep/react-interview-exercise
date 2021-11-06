@@ -62,18 +62,17 @@ const Home: React.FC = () => {
                     </Text>
                     <Divider margin={4} />
                     <Text>
-                        Check the console for example of returned data. <b>Happy coding!</b>< br />
-                        {searching ? <Spinner /> : <></>}< br />
-                        {districtSearch.length} Demo Districts<br />
-                        {schoolSearch.length} Demo Schools<br />
+                        Enter a <b>District</b> and <b>School</b> below, then click <b>Search!</b>
                     </Text>
-                    <Stack spacing={4}>
+                    <Stack spacing={3}>
                         <InputGroup>
                             <InputLeftElement
                             pointerEvents="none"
                             children={<Search2Icon color="black.300" />}
                             />
                             <Input 
+                            borderRadius="20"
+                            boxShadow="base"
                             placeholder="District" 
                             />
                         </InputGroup>
@@ -83,9 +82,22 @@ const Home: React.FC = () => {
                             />
                             <Input 
                             focusBorderColor="green.300"
+                            borderRadius="20"
+                            boxShadow="base"
                             placeholder="School" 
                             />
                         </InputGroup>
+                        <Button 
+                            colorScheme="purple"
+                            boxShadow="md" 
+                            variant="solid">
+                            Search!
+                        </Button>
+                        <Text>
+                            {searching ? <Spinner /> : <></>}< br />
+                            {districtSearch.length} Districts<br />
+                            {schoolSearch.length} Schools<br />
+                        </Text>
                     </Stack>
                 </Card>
             </ScaleFade>
