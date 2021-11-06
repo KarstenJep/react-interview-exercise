@@ -12,10 +12,13 @@ import {
     ListItem,
     Spinner,
     InputGroup, // Some Chakra components that might be usefull
+    InputLeftElement,
+    Stack,
     HStack,
     VStack,
     InputRightAddon,
 } from "@chakra-ui/react"
+import { Search2Icon } from '@chakra-ui/icons'
 import { Card } from '@components/design/Card'
 import { searchSchoolDistricts, searchSchools, NCESDistrictFeatureAttributes, NCESSchoolFeatureAttributes } from "@utils/nces"
 
@@ -28,11 +31,13 @@ const Home: React.FC = () => {
     // function to handle district and school search queries. 1st draft
     const search = async () => {
         setSearching(true)
-        setDistrictSearch(await searchSchoolDistricts("Peninsula School District"))
-        console.log("District example", districtSearch);
+        const demoDistrictSearch = await searchSchoolDistricts("Peninsula School District")
+        setDistrictSearch(demoDistrictSearch)
+        console.log("District example", demoDistrictSearch);
         
-        setSchoolSearch(await searchSchools("k", districtSearch[1].LEAID))
-        console.log("School example", schoolSearch);
+        const demoSchoolSearch = await searchSchools("k", demoDistrictSearch[1].LEAID)
+        setSchoolSearch(demoSchoolSearch)
+        console.log("School example", demoSchoolSearch);
         setSearching(false)
     }
 
@@ -62,6 +67,26 @@ const Home: React.FC = () => {
                         {districtSearch.length} Demo Districts<br />
                         {schoolSearch.length} Demo Schools<br />
                     </Text>
+                    <Stack spacing={4}>
+                        <InputGroup>
+                            <InputLeftElement
+                            pointerEvents="none"
+                            children={<Search2Icon color="black.300" />}
+                            />
+                            <Input 
+                            placeholder="District" 
+                            />
+                        </InputGroup>
+                        <InputGroup>
+                            <InputLeftElement
+                            children={<Search2Icon color="black.300" />}
+                            />
+                            <Input 
+                            focusBorderColor="green.300"
+                            placeholder="School" 
+                            />
+                        </InputGroup>
+                    </Stack>
                 </Card>
             </ScaleFade>
         </Center>
