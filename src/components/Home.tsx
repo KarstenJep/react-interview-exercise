@@ -25,20 +25,20 @@ const Home: React.FC = () => {
     const [districtSearch, setDistrictSearch] = React.useState<NCESDistrictFeatureAttributes[]>([]);
     const [schoolSearch, setSchoolSearch] = React.useState<NCESSchoolFeatureAttributes[]>([]);
     
-    const demo = async () => { // see console for api result examples
+    // function to handle district and school search queries. 1st draft
+    const search = async () => {
         setSearching(true)
-        const demoDistrictSearch = await searchSchoolDistricts("Peninsula School District")
-        setDistrictSearch(demoDistrictSearch)
-        console.log("District example", demoDistrictSearch)
-
-        const demoSchoolSearch = await searchSchools("k", demoDistrictSearch[1].LEAID)
-        setSchoolSearch(demoSchoolSearch)
-        console.log("School Example", demoSchoolSearch)
+        setDistrictSearch(await searchSchoolDistricts("Peninsula School District"))
+        console.log("District example", districtSearch);
+        
+        setSchoolSearch(await searchSchools("k", districtSearch[1].LEAID))
+        console.log("School example", schoolSearch);
         setSearching(false)
     }
 
+    // useEffect is listening, ready to call search function
     useEffect(() => {
-        demo()
+        search()
     }, [])
     
     return (
