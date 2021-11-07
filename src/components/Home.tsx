@@ -26,20 +26,32 @@ import { searchSchoolDistricts, searchSchools, NCESDistrictFeatureAttributes, NC
 const Home: React.FC = () => {
     const [searching, setSearching] = React.useState(false)
     const [districtSearch, setDistrictSearch] = React.useState<NCESDistrictFeatureAttributes[]>([]);
+    const [districtSchoolSearch, setDistrictSchoolSearch] = React.useState<NCESSchoolFeatureAttributes[]>([]);
     const [schoolSearch, setSchoolSearch] = React.useState<NCESSchoolFeatureAttributes[]>([]);
     const [district, setDistrict] = React.useState('');
+    const [districtSchool, setDistrictSchool] = React.useState('');
     const [school, setSchool] = React.useState('');
     
 
     
-    // function to handle district and school search queries. 1st draft
-    // ToDo: seperate district and school searches into seperate function
-    const search = async () => {
-        console.log('in search', district, school);
+    // function to handle district and districtSchools search queries. 
+    const handleDistrict= async () => {
+        console.log('in handleDistrict', district, districtSchool);
         setSearching(true)
         const districtSearch = await searchSchoolDistricts(district)
         setDistrictSearch(districtSearch)
-        console.log("District:", districtSearch);
+        console.log("District(s):", districtSearch);
+        
+        const districtSchoolSearch = await searchSchools(districtSchool, districtSearch[1].LEAID)
+        setDistrictSchoolSearch(districtSchoolSearch)
+        console.log("District School(s):", districtSchoolSearch);
+        setSearching(false)
+    }
+
+    // function to handle school search queries that bypass district
+    const handleSchool = async () => {
+        console.log('in handleSchool', school);
+        setSearching(true)
         
         const schoolSearch = await searchSchools(school)
         setSchoolSearch(schoolSearch)
@@ -49,7 +61,8 @@ const Home: React.FC = () => {
 
     // useEffect is listening, ready to call search function
     useEffect(() => {
-        search()
+        handleDistrict();
+        handleSchool();
     }, [])
 
     // Validate inputs
@@ -57,7 +70,8 @@ const Home: React.FC = () => {
     const validate = (e) => {
         e.preventDefault();
         console.log('in validateDistrict', district);
-        search();
+        handleDistrict();
+        handleSchool();
     }
 
     
@@ -80,7 +94,7 @@ const Home: React.FC = () => {
                         </OrderedList>
                     </Text> */}
                     
-                    <HStack spacing={16}>
+                    <HStack spacing={12}>
                     {/* District Form */}
                     <form onSubmit={validate}>
                         <Stack spacing={3}>
@@ -156,6 +170,7 @@ const Home: React.FC = () => {
                         <Text>
                             {searching ? <Spinner /> : <></>}< br />
                             {districtSearch.length} Districts<br />
+                            {districtSchoolSearch.length} District Schools<br />
                             {schoolSearch.length} Schools<br />
                         </Text>
                 </Card>
@@ -166,4 +181,3 @@ const Home: React.FC = () => {
 
 export default Home
 
-// districtSearch[1].LEAID
