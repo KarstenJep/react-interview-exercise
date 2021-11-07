@@ -28,6 +28,7 @@ const Home: React.FC = () => {
     const [districtSearch, setDistrictSearch] = React.useState<NCESDistrictFeatureAttributes[]>([]);
     const [schoolSearch, setSchoolSearch] = React.useState<NCESSchoolFeatureAttributes[]>([]);
     const [district, setDistrict] = React.useState('');
+    const [districtError, setDistrictError] = React.useState(false);
 
     
     // function to handle district and school search queries. 1st draft
@@ -50,6 +51,14 @@ const Home: React.FC = () => {
         search()
     }, [])
 
+    // Validate District input
+    // Todo: declare type for e or find a different method
+    const validateDistrict = (e) => {
+        e.preventDefault();
+        console.log('in validateDistrict', district);
+        search();
+    }
+
     
 
     
@@ -71,6 +80,8 @@ const Home: React.FC = () => {
                     <Text>
                         Enter a <b>District</b> and <b>School</b> below, then click <b>Search!</b>
                     </Text>
+                    
+                    <form onSubmit={validateDistrict}>
                     <Stack spacing={3}>
                         {/* District Input*/}
                         <InputGroup>
@@ -82,6 +93,7 @@ const Home: React.FC = () => {
                             borderRadius="20"
                             boxShadow="base"
                             placeholder="District"
+                            isRequired
                             onChange={(e) => setDistrict(e.target.value)} 
                             />
                         </InputGroup>
@@ -90,9 +102,13 @@ const Home: React.FC = () => {
                             colorScheme="purple"
                             boxShadow="md" 
                             variant="solid"
-                            onClick={search}>
+                            type="submit"
+                            isFullWidth>
                             Search District
                         </Button>
+                        </Stack>
+                    </form>
+                    <Stack spacing={3}>
                         {/* School Input*/}
                         <InputGroup>
                             <InputLeftElement
