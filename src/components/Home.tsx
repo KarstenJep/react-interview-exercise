@@ -68,7 +68,9 @@ const Home: React.FC = () => {
             <ScaleFade initialScale={0.9} in={true}>
                 <Card variant="rounded" borderColor="blue">
                     <Heading>School Data Finder</Heading>
-                    <Text>
+
+                    <Divider margin={4} />
+                    {/* <Text>
                         How would you utilize React.useEffect with the searchSchoolDistricts and searchSchools functions? <br />
                         Using <a href="https://chakra-ui.com/docs/principles" target="_blank">Chakra-UI</a> or your favorite UI toolkit, build an interface that allows the user to: <br />
                         <OrderedList>
@@ -76,9 +78,9 @@ const Home: React.FC = () => {
                             <ListItem>Search for a school within the district (or bypass district filter)</ListItem>
                             <ListItem>View all returned data in an organized way</ListItem>
                         </OrderedList>
-                    </Text>
-                    <Divider margin={4} />
+                    </Text> */}
                     
+                    <HStack spacing={16}>
                     {/* District Form */}
                     <form onSubmit={validate}>
                         <Stack spacing={3}>
@@ -112,6 +114,10 @@ const Home: React.FC = () => {
                         </Stack>
                     </form>
 
+                    <Text>
+                        OR
+                    </Text>
+
                     {/* School Form */}
                     <form onSubmit={validate}>
                         <Stack spacing={3}>
@@ -143,6 +149,10 @@ const Home: React.FC = () => {
                             </Button>
                         </Stack>
                     </form>
+                    </HStack>
+
+                    <Divider margin={4} />
+
                         <Text>
                             {searching ? <Spinner /> : <></>}< br />
                             {districtSearch.length} Districts<br />
