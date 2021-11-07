@@ -27,17 +27,21 @@ const Home: React.FC = () => {
     const [searching, setSearching] = React.useState(false)
     const [districtSearch, setDistrictSearch] = React.useState<NCESDistrictFeatureAttributes[]>([]);
     const [schoolSearch, setSchoolSearch] = React.useState<NCESSchoolFeatureAttributes[]>([]);
+    const [district, setDistrict] = React.useState('');
+
     
     // function to handle district and school search queries. 1st draft
     const search = async () => {
+        console.log('in searchDistrict', district);
+
         setSearching(true)
-        const demoDistrictSearch = await searchSchoolDistricts("Peninsula School District")
-        setDistrictSearch(demoDistrictSearch)
-        console.log("District example", demoDistrictSearch);
+        const districtSearch = await searchSchoolDistricts(district)
+        setDistrictSearch(districtSearch)
+        console.log("District example", districtSearch);
         
-        const demoSchoolSearch = await searchSchools("k", demoDistrictSearch[1].LEAID)
-        setSchoolSearch(demoSchoolSearch)
-        console.log("School example", demoSchoolSearch);
+        const schoolSearch = await searchSchools("k", districtSearch[1].LEAID)
+        setSchoolSearch(schoolSearch)
+        console.log("School example", schoolSearch);
         setSearching(false)
     }
 
@@ -45,6 +49,9 @@ const Home: React.FC = () => {
     useEffect(() => {
         search()
     }, [])
+
+    
+
     
     return (
         <Center padding="100px" height="90vh">
@@ -74,14 +81,16 @@ const Home: React.FC = () => {
                             <Input 
                             borderRadius="20"
                             boxShadow="base"
-                            placeholder="District" 
+                            placeholder="District"
+                            onChange={(e) => setDistrict(e.target.value)} 
                             />
                         </InputGroup>
                          {/* Search District Button */}
                          <Button 
                             colorScheme="purple"
                             boxShadow="md" 
-                            variant="solid">
+                            variant="solid"
+                            onClick={search}>
                             Search District
                         </Button>
                         {/* School Input*/}
