@@ -28,19 +28,19 @@ const Home: React.FC = () => {
     const [districtSearch, setDistrictSearch] = React.useState<NCESDistrictFeatureAttributes[]>([]);
     const [schoolSearch, setSchoolSearch] = React.useState<NCESSchoolFeatureAttributes[]>([]);
     const [district, setDistrict] = React.useState('');
-    const [districtError, setDistrictError] = React.useState(false);
+    const [school, setSchool] = React.useState('');
+    
 
     
     // function to handle district and school search queries. 1st draft
     const search = async () => {
         console.log('in searchDistrict', district);
-
         setSearching(true)
         const districtSearch = await searchSchoolDistricts(district)
         setDistrictSearch(districtSearch)
         console.log("District example", districtSearch);
         
-        const schoolSearch = await searchSchools("k", districtSearch[1].LEAID)
+        const schoolSearch = await searchSchools(school)
         setSchoolSearch(schoolSearch)
         console.log("School example", schoolSearch);
         setSearching(false)
@@ -77,35 +77,37 @@ const Home: React.FC = () => {
                         </OrderedList>
                     </Text>
                     <Divider margin={4} />
-                    <Text>
-                        Enter a <b>District</b> and <b>School</b> below, then click <b>Search!</b>
-                    </Text>
                     
+                    {/* District Form */}
                     <form onSubmit={validateDistrict}>
-                    <Stack spacing={3}>
-                        {/* District Input*/}
-                        <InputGroup>
-                            <InputLeftElement
-                            pointerEvents="none"
-                            children={<Search2Icon color="black.300" />}
-                            />
-                            <Input 
-                            borderRadius="20"
-                            boxShadow="base"
-                            placeholder="District"
-                            isRequired
-                            onChange={(e) => setDistrict(e.target.value)} 
-                            />
-                        </InputGroup>
-                         {/* Search District Button */}
-                         <Button 
-                            colorScheme="purple"
-                            boxShadow="md" 
-                            variant="solid"
-                            type="submit"
-                            isFullWidth>
-                            Search District
-                        </Button>
+                        <Stack spacing={3}>
+                            {/* Helper Text */}
+                            <Text>
+                                Enter a <b>District</b> and click <b>Search!</b>
+                            </Text>
+                            {/* District Input*/}
+                            <InputGroup>
+                                <InputLeftElement
+                                pointerEvents="none"
+                                children={<Search2Icon color="black.300" />}
+                                />
+                                <Input 
+                                borderRadius="20"
+                                boxShadow="base"
+                                placeholder="District"
+                                isRequired
+                                onChange={(e) => setDistrict(e.target.value)} 
+                                />
+                            </InputGroup>
+                            {/* Search District Button */}
+                            <Button 
+                                colorScheme="purple"
+                                boxShadow="md" 
+                                variant="solid"
+                                type="submit"
+                                isFullWidth>
+                                Search
+                            </Button>
                         </Stack>
                     </form>
                     <Stack spacing={3}>
@@ -118,14 +120,16 @@ const Home: React.FC = () => {
                             focusBorderColor="green.300"
                             borderRadius="20"
                             boxShadow="base"
-                            placeholder="School" 
+                            placeholder="School"
+                            onChange={(e) => setSchool(e.target.value)}  
                             />
                         </InputGroup>
                         {/* Search School Button */}
                         <Button 
                             colorScheme="purple"
                             boxShadow="md" 
-                            variant="solid">
+                            variant="solid"
+                            onClick={search}>
                             Search School
                         </Button>
                         <Text>
@@ -141,3 +145,5 @@ const Home: React.FC = () => {
 };
 
 export default Home
+
+// districtSearch[1].LEAID
