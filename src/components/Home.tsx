@@ -33,16 +33,17 @@ const Home: React.FC = () => {
 
     
     // function to handle district and school search queries. 1st draft
+    // ToDo: seperate district and school searches into seperate function
     const search = async () => {
-        console.log('in searchDistrict', district);
+        console.log('in search', district, school);
         setSearching(true)
         const districtSearch = await searchSchoolDistricts(district)
         setDistrictSearch(districtSearch)
-        console.log("District example", districtSearch);
+        console.log("District:", districtSearch);
         
         const schoolSearch = await searchSchools(school)
         setSchoolSearch(schoolSearch)
-        console.log("School example", schoolSearch);
+        console.log("School:", schoolSearch);
         setSearching(false)
     }
 
@@ -51,9 +52,9 @@ const Home: React.FC = () => {
         search()
     }, [])
 
-    // Validate District input
+    // Validate inputs
     // Todo: declare type for e or find a different method
-    const validateDistrict = (e) => {
+    const validate = (e) => {
         e.preventDefault();
         console.log('in validateDistrict', district);
         search();
@@ -79,7 +80,7 @@ const Home: React.FC = () => {
                     <Divider margin={4} />
                     
                     {/* District Form */}
-                    <form onSubmit={validateDistrict}>
+                    <form onSubmit={validate}>
                         <Stack spacing={3}>
                             {/* Helper Text */}
                             <Text>
@@ -110,34 +111,43 @@ const Home: React.FC = () => {
                             </Button>
                         </Stack>
                     </form>
-                    <Stack spacing={3}>
-                        {/* School Input*/}
-                        <InputGroup>
-                            <InputLeftElement
-                            children={<Search2Icon color="black.300" />}
-                            />
-                            <Input 
-                            focusBorderColor="green.300"
-                            borderRadius="20"
-                            boxShadow="base"
-                            placeholder="School"
-                            onChange={(e) => setSchool(e.target.value)}  
-                            />
-                        </InputGroup>
-                        {/* Search School Button */}
-                        <Button 
-                            colorScheme="purple"
-                            boxShadow="md" 
-                            variant="solid"
-                            onClick={search}>
-                            Search School
-                        </Button>
+
+                    {/* School Form */}
+                    <form onSubmit={validate}>
+                        <Stack spacing={3}>
+                            {/* Helper Text */}
+                            <Text>
+                                Enter a <b>School</b> and click <b>Search!</b>
+                            </Text>
+                            {/* School Input*/}
+                            <InputGroup>
+                                <InputLeftElement
+                                children={<Search2Icon color="black.300" />}
+                                />
+                                <Input 
+                                focusBorderColor="green.300"
+                                borderRadius="20"
+                                boxShadow="base"
+                                placeholder="School"
+                                isRequired
+                                onChange={(e) => setSchool(e.target.value)}  
+                                />
+                            </InputGroup>
+                            {/* Search School Button */}
+                            <Button 
+                                colorScheme="purple"
+                                boxShadow="md" 
+                                variant="solid"
+                                type="submit">
+                                Search School
+                            </Button>
+                        </Stack>
+                    </form>
                         <Text>
                             {searching ? <Spinner /> : <></>}< br />
                             {districtSearch.length} Districts<br />
                             {schoolSearch.length} Schools<br />
                         </Text>
-                    </Stack>
                 </Card>
             </ScaleFade>
         </Center>
