@@ -15,6 +15,8 @@ import {
     InputLeftElement,
     Stack,
     HStack,
+    List,
+    ListIcon,
     VStack,
     InputRightAddon,
 } from "@chakra-ui/react"
@@ -31,8 +33,6 @@ const Home: React.FC = () => {
     const [district, setDistrict] = React.useState('');
     const [districtSchool, setDistrictSchool] = React.useState('');
     const [school, setSchool] = React.useState('');
-    
-
     
     // function to handle district and districtSchools search queries. 
     const handleDistrict= async () => {
@@ -73,12 +73,9 @@ const Home: React.FC = () => {
         handleDistrict();
         handleSchool();
     }
-
-    
-
     
     return (
-        <Center padding="100px" height="90vh">
+        <Center padding="100px" > {/* Removed height="90vh" to allow for scrolling */}
             <ScaleFade initialScale={0.9} in={true}>
                 <Card variant="rounded" borderColor="blue">
                     <Heading>School Data Finder</Heading>
@@ -94,6 +91,8 @@ const Home: React.FC = () => {
                         </OrderedList>
                     </Text> */}
                     
+                    {/* Hstack places forms side by side
+                    TO DO: add mobile/tablet responsiveness */}
                     <HStack spacing={12}>
                     {/* District Form */}
                     <form onSubmit={validate}>
@@ -169,10 +168,24 @@ const Home: React.FC = () => {
 
                         <Text>
                             {searching ? <Spinner /> : <></>}< br />
-                            {districtSearch.length} Districts<br />
+                            
                             {districtSchoolSearch.length} District Schools<br />
                             {schoolSearch.length} Schools<br />
                         </Text>
+
+                        {/* District search results. If there more than 100 results, only the number will be displayed */}
+                        {districtSearch.length < 100 ? 
+                        districtSearch.map((districts, i) => {
+                            console.log('In districtSearch map', districts);
+                            return (
+                                <List spacing={3}>
+                                    <ListItem>
+                                        <ListIcon as={Search2Icon} color="green.500" />
+                                        {districts.NAME} - {districts.LCITY}, {districts.LSTATE}
+                                    </ListItem>
+                                </List>
+                            )
+                        })  : <Text>{districtSearch.length} Districts</Text>}
                 </Card>
             </ScaleFade>
         </Center>
