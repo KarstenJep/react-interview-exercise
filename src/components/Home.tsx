@@ -65,6 +65,7 @@ const Home: React.FC = () => {
                         Enter a <b>District</b> and <b>School</b> below, then click <b>Search!</b>
                     </Text>
                     <Stack spacing={3}>
+                        {/* District Input*/}
                         <InputGroup>
                             <InputLeftElement
                             pointerEvents="none"
@@ -76,6 +77,14 @@ const Home: React.FC = () => {
                             placeholder="District" 
                             />
                         </InputGroup>
+                         {/* Search District Button */}
+                         <Button 
+                            colorScheme="purple"
+                            boxShadow="md" 
+                            variant="solid">
+                            Search District
+                        </Button>
+                        {/* School Input*/}
                         <InputGroup>
                             <InputLeftElement
                             children={<Search2Icon color="black.300" />}
@@ -87,11 +96,12 @@ const Home: React.FC = () => {
                             placeholder="School" 
                             />
                         </InputGroup>
+                        {/* Search School Button */}
                         <Button 
                             colorScheme="purple"
                             boxShadow="md" 
                             variant="solid">
-                            Search!
+                            Search School
                         </Button>
                         <Text>
                             {searching ? <Spinner /> : <></>}< br />
