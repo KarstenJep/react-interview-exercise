@@ -26,7 +26,8 @@ import { searchSchoolDistricts, searchSchools, NCESDistrictFeatureAttributes, NC
 
 
 const Home: React.FC = () => {
-    const [searching, setSearching] = React.useState(false)
+    const [searching, setSearching] = React.useState(false);
+    const [userSearch, setUserSearch] = React.useState(false);
     const [districtSearch, setDistrictSearch] = React.useState<NCESDistrictFeatureAttributes[]>([]);
     const [districtSchoolSearch, setDistrictSchoolSearch] = React.useState<NCESSchoolFeatureAttributes[]>([]);
     const [schoolSearch, setSchoolSearch] = React.useState<NCESSchoolFeatureAttributes[]>([]);
@@ -70,6 +71,7 @@ const Home: React.FC = () => {
     const validate = (e) => {
         e.preventDefault();
         console.log('in validateDistrict', district);
+        setUserSearch(true);
         handleDistrict();
         handleSchool();
     }
@@ -81,15 +83,6 @@ const Home: React.FC = () => {
                     <Heading>School Data Finder</Heading>
 
                     <Divider margin={4} />
-                    {/* <Text>
-                        How would you utilize React.useEffect with the searchSchoolDistricts and searchSchools functions? <br />
-                        Using <a href="https://chakra-ui.com/docs/principles" target="_blank">Chakra-UI</a> or your favorite UI toolkit, build an interface that allows the user to: <br />
-                        <OrderedList>
-                            <ListItem>Search for a district</ListItem>
-                            <ListItem>Search for a school within the district (or bypass district filter)</ListItem>
-                            <ListItem>View all returned data in an organized way</ListItem>
-                        </OrderedList>
-                    </Text> */}
                     
                     {/* Hstack places forms side by side
                     TO DO: add mobile/tablet responsiveness */}
@@ -166,26 +159,35 @@ const Home: React.FC = () => {
 
                     <Divider margin={4} />
 
-                        <Text>
-                            {searching ? <Spinner /> : <></>}< br />
-                            
-                            {districtSchoolSearch.length} District Schools<br />
-                            {schoolSearch.length} Schools<br />
-                        </Text>
-
-                        {/* District search results. If there more than 100 results, only the number will be displayed */}
-                        {districtSearch.length < 100 ? 
-                        districtSearch.map((districts, i) => {
+                    {/* District search results. If there more than 100 results, only the number will be displayed */}
+                    {userSearch ?
+                        <>
+                        <Text><b>{districtSearch.length} Districts</b></Text>
+                        {districtSearch.map((districts) => {
                             console.log('In districtSearch map', districts);
                             return (
                                 <List spacing={3}>
-                                    <ListItem>
+                                    <ListItem
+                                        key={districts.OBJECTID}
+                                        cursor="pointer"
+                                        _hover={{fontWeight: "900"}}
+                                        // onClick={(e) => handleInfo(districts)}
+                                    >
                                         <ListIcon as={Search2Icon} color="green.500" />
                                         {districts.NAME} - {districts.LCITY}, {districts.LSTATE}
                                     </ListItem>
                                 </List>
                             )
-                        })  : <Text>{districtSearch.length} Districts</Text>}
+                        })}
+                        </> 
+                    : 
+                        <Text>
+                            {searching ? <Spinner /> : <></>}< br />
+                            {districtSearch.length} Districts<br />
+                            {districtSchoolSearch.length} District Schools<br />
+                            {schoolSearch.length} Schools<br />
+                        </Text>
+                    }
                 </Card>
             </ScaleFade>
         </Center>
