@@ -38,37 +38,58 @@ const Home: React.FC = () => {
     const [districtSchool, setDistrictSchool] = React.useState('');
     const [school, setSchool] = React.useState('');
     
+    // Validate inputs
+    const validateDistrict = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        console.log('in validateDistrict', district);
+        setUserSearch(true);
+        setSearching(true);
+        setShowDistrictList(true);
+        handleDistrict();
+        
+    }
+
+     // Validate inputs
+     const validateSchool = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        console.log('in validateDistrict', district);
+        setUserSearch(true);
+        setSearching(true)
+        handleSchool();
+    }
+
     // function to handle district and districtSchools search queries. 
     const handleDistrict= async () => {
-        console.log('in handleDistrict', district, districtSchool);
+        // console.log('in handleDistrict', district, districtSchool);
+        
         const districtSearch = await searchSchoolDistricts(district)
         setDistrictSearch(districtSearch)
-        setShowDistrictList(true)
-        // setShowSchoolList(false)
+       
         console.log("District(s):", districtSearch);
-        
-        const districtSchoolSearch = await searchSchools(districtSchool, districtSearch[1].LEAID)
-        setDistrictSchoolSearch(districtSchoolSearch)
-        console.log("District School(s):", districtSchoolSearch);
+    
+        // const districtSchoolSearch = await searchSchools(districtSchool, districtSearch[1].LEAID)
+        // setDistrictSchoolSearch(districtSchoolSearch)
+        // console.log("District School(s):", districtSchoolSearch);
         setSearching(false)
         console.log("district state", showDistrictList, "school state", showSchoolList)
         //Clear form
         setDistrict('')
+        
     }
 
     // function to handle school search queries that bypass district
     const handleSchool = async () => {
-        console.log('in handleSchool', school);
-        // setSearching(true)
+        // console.log('in handleSchool', school);
+        setShowDistrictList(false);
         const schoolSearch = await searchSchools(school)
         setSchoolSearch(schoolSearch)
-        setShowDistrictList(false)
-        // setShowSchoolList(true)
+       
         console.log("School:", schoolSearch);
         setSearching(false)
         console.log("district state", showDistrictList, "school state", showSchoolList)
         //Clear form
         setSchool('')
+       
     }
 
     // useEffect is listening, ready to call search function
@@ -76,16 +97,6 @@ const Home: React.FC = () => {
         handleDistrict();
         handleSchool();
     }, [])
-
-    // Validate inputs
-    const validate = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        console.log('in validateDistrict', district);
-        setUserSearch(true);
-        setSearching(true)
-        handleDistrict();
-        handleSchool();
-    }
     
     return (
         <Center padding="100px" > {/* Removed height="90vh" to allow for scrolling */}
@@ -99,7 +110,7 @@ const Home: React.FC = () => {
                     TO DO: add mobile/tablet responsiveness */}
                     <HStack spacing={12}>
                     {/* District Form */}
-                    <form onSubmit={validate}>
+                    <form onSubmit={validateDistrict}>
                         <Stack spacing={3}>
                             {/* Helper Text */}
                             <Text textAlign="center">
@@ -144,7 +155,7 @@ const Home: React.FC = () => {
                     </Text>
 
                     {/* School Form */}
-                    <form onSubmit={validate}>
+                    <form onSubmit={validateSchool}>
                         <Stack spacing={3}>
                             {/* Helper Text */}
                             <Text textAlign="center">
@@ -186,12 +197,12 @@ const Home: React.FC = () => {
 
                     <Divider margin={4} />
                     
-                    {!userSearch && 
+                    {!userSearch && !showDistrictList &&
                     <img width="100" src={Logo} alt="CharacterStrong Logo" />
                     }
                     {/* UserSearch checks if the user has entered search query before mapping. This prevents mapping all unfiltered results on page load.
                     If user has not entered a search query, the number of total districts is displayed*/}
-                    {/* {userSearch && showDistrictList ?
+                    {userSearch && showDistrictList ?
                         <>
                             <Text><b><u>{district} - {districtSearch.length} Districts</u></b></Text>
                             {districtSearch.map((districts) => {
@@ -201,7 +212,7 @@ const Home: React.FC = () => {
                                         <ListItem
                                             key={districts.OBJECTID}
                                             cursor="pointer"
-                                            _hover={{fontWeight: "900"}}
+                                            _hover={{fontWeight: "900", color: "blue.500"}}
                                             // onClick={(e) => handleInfo(districts)}
                                         >
                                             <ListIcon as={Search2Icon} color="blue.500" />
@@ -221,7 +232,7 @@ const Home: React.FC = () => {
                                         <ListItem
                                             key={schools.NCESSCH}
                                             cursor="pointer"
-                                            _hover={{fontWeight: "900"}}
+                                            _hover={{fontWeight: "900", color:"yellow.500"}}
                                             // onClick={(e) => handleInfo(districts)}
                                         >
                                             <ListIcon as={Search2Icon} color="yellow.500" />
@@ -231,7 +242,7 @@ const Home: React.FC = () => {
                                 )
                             })} 
                        </> }
-                  */}
+                 
                 </Card>
             </ScaleFade>
         </Center>
