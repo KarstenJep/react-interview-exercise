@@ -23,7 +23,7 @@ import {
 import { Search2Icon } from '@chakra-ui/icons'
 import { Card } from '@components/design/Card'
 import { searchSchoolDistricts, searchSchools, NCESDistrictFeatureAttributes, NCESSchoolFeatureAttributes } from "@utils/nces"
-import DistrictList from "./DistrictList"
+import Logo from '../logo192.png';
 
 
 const Home: React.FC = () => {
@@ -44,14 +44,16 @@ const Home: React.FC = () => {
         const districtSearch = await searchSchoolDistricts(district)
         setDistrictSearch(districtSearch)
         setShowDistrictList(true)
-        setShowSchoolList(false)
+        // setShowSchoolList(false)
         console.log("District(s):", districtSearch);
         
         const districtSchoolSearch = await searchSchools(districtSchool, districtSearch[1].LEAID)
         setDistrictSchoolSearch(districtSchoolSearch)
         console.log("District School(s):", districtSchoolSearch);
         setSearching(false)
-        console.log(showDistrictList, showSchoolList)
+        console.log("district state", showDistrictList, "school state", showSchoolList)
+        //Clear form
+        setDistrict('')
     }
 
     // function to handle school search queries that bypass district
@@ -61,10 +63,12 @@ const Home: React.FC = () => {
         const schoolSearch = await searchSchools(school)
         setSchoolSearch(schoolSearch)
         setShowDistrictList(false)
-        setShowSchoolList(true)
+        // setShowSchoolList(true)
         console.log("School:", schoolSearch);
         setSearching(false)
-        console.log(showDistrictList, showSchoolList)
+        console.log("district state", showDistrictList, "school state", showSchoolList)
+        //Clear form
+        setSchool('')
     }
 
     // useEffect is listening, ready to call search function
@@ -74,7 +78,6 @@ const Home: React.FC = () => {
     }, [])
 
     // Validate inputs
-    // Todo: declare type for e or find a different method
     const validate = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         console.log('in validateDistrict', district);
@@ -87,7 +90,7 @@ const Home: React.FC = () => {
     return (
         <Center padding="100px" > {/* Removed height="90vh" to allow for scrolling */}
             <ScaleFade initialScale={0.9} in={true}>
-                <Card variant="rounded" borderColor="green.300">
+                <Card variant="rounded" borderColor="green.400">
                     <Heading>School Data Finder</Heading>
 
                     <Divider margin={4} />
@@ -112,6 +115,7 @@ const Home: React.FC = () => {
                                 borderRadius="20"
                                 boxShadow="base"
                                 placeholder="District"
+                                value={district}
                                 isRequired
                                 onChange={(e) => setDistrict(e.target.value)} 
                                 />
@@ -156,6 +160,7 @@ const Home: React.FC = () => {
                                     borderRadius="20"
                                     boxShadow="base"
                                     placeholder="School"
+                                    value={school}
                                     isRequired
                                     onChange={(e) => setSchool(e.target.value)}  
                                 />
@@ -180,19 +185,16 @@ const Home: React.FC = () => {
                     </HStack>
 
                     <Divider margin={4} />
-
+                    
+                    {!userSearch && 
+                    <img width="100" src={Logo} alt="CharacterStrong Logo" />
+                    }
                     {/* UserSearch checks if the user has entered search query before mapping. This prevents mapping all unfiltered results on page load.
                     If user has not entered a search query, the number of total districts is displayed*/}
-                    {userSearch ?
+                    {/* {userSearch && showDistrictList ?
                         <>
-                        {/* {showDistrictList ?
-                        <Text><b><u>{district} - {districtSearch.length} Districts</u></b></Text> 
-                        : 
-                        <Text><b><u>{school} - {schoolSearch.length} Schools</u></b></Text>
-                        } */}
-                        
-                        {showDistrictList &&
-                            districtSearch.map((districts) => {
+                            <Text><b><u>{district} - {districtSearch.length} Districts</u></b></Text>
+                            {districtSearch.map((districts) => {
                             // console.log('In districtSearch map', districts);
                                 return (
                                     <List spacing={3}>
@@ -207,12 +209,29 @@ const Home: React.FC = () => {
                                         </ListItem>
                                     </List>
                                 )
-                            }) 
-                        }
-                        </> 
-                    : 
-                       <></>
-                    }
+                            })}
+                        </>
+                        :
+                        <>
+                            <Text><b><u>{school} - {schoolSearch.length} Schools</u></b></Text>
+                            {schoolSearch.map((schools) => {
+                            // console.log('In districtSearch map', districts);
+                                return (
+                                    <List spacing={3}>
+                                        <ListItem
+                                            key={schools.NCESSCH}
+                                            cursor="pointer"
+                                            _hover={{fontWeight: "900"}}
+                                            // onClick={(e) => handleInfo(districts)}
+                                        >
+                                            <ListIcon as={Search2Icon} color="yellow.500" />
+                                            {schools.NAME} - {schools.CITY}, {schools.STATE}
+                                        </ListItem>
+                                    </List>
+                                )
+                            })} 
+                       </> }
+                  */}
                 </Card>
             </ScaleFade>
         </Center>
