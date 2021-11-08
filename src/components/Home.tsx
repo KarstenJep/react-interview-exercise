@@ -23,11 +23,14 @@ import {
 import { Search2Icon } from '@chakra-ui/icons'
 import { Card } from '@components/design/Card'
 import { searchSchoolDistricts, searchSchools, NCESDistrictFeatureAttributes, NCESSchoolFeatureAttributes } from "@utils/nces"
+import DistrictList from "./DistrictList"
 
 
 const Home: React.FC = () => {
     const [searching, setSearching] = React.useState(false);
     const [userSearch, setUserSearch] = React.useState(false);
+    const [showDistrictList, setShowDistrictList] = React.useState(false);
+    const [showSchoolList, setShowSchoolList] = React.useState(false);
     const [districtSearch, setDistrictSearch] = React.useState<NCESDistrictFeatureAttributes[]>([]);
     const [districtSchoolSearch, setDistrictSchoolSearch] = React.useState<NCESSchoolFeatureAttributes[]>([]);
     const [schoolSearch, setSchoolSearch] = React.useState<NCESSchoolFeatureAttributes[]>([]);
@@ -38,26 +41,30 @@ const Home: React.FC = () => {
     // function to handle district and districtSchools search queries. 
     const handleDistrict= async () => {
         console.log('in handleDistrict', district, districtSchool);
-        
         const districtSearch = await searchSchoolDistricts(district)
         setDistrictSearch(districtSearch)
+        setShowDistrictList(true)
+        setShowSchoolList(false)
         console.log("District(s):", districtSearch);
         
         const districtSchoolSearch = await searchSchools(districtSchool, districtSearch[1].LEAID)
         setDistrictSchoolSearch(districtSchoolSearch)
         console.log("District School(s):", districtSchoolSearch);
         setSearching(false)
+        console.log(showDistrictList, showSchoolList)
     }
 
     // function to handle school search queries that bypass district
     const handleSchool = async () => {
         console.log('in handleSchool', school);
-        setSearching(true)
-        
+        // setSearching(true)
         const schoolSearch = await searchSchools(school)
         setSchoolSearch(schoolSearch)
+        setShowDistrictList(false)
+        setShowSchoolList(true)
         console.log("School:", schoolSearch);
         setSearching(false)
+        console.log(showDistrictList, showSchoolList)
     }
 
     // useEffect is listening, ready to call search function
@@ -68,7 +75,7 @@ const Home: React.FC = () => {
 
     // Validate inputs
     // Todo: declare type for e or find a different method
-    const validate = (e) => {
+    const validate = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         console.log('in validateDistrict', district);
         setUserSearch(true);
@@ -178,23 +185,30 @@ const Home: React.FC = () => {
                     If user has not entered a search query, the number of total districts is displayed*/}
                     {userSearch ?
                         <>
-                        <Text><b><u>{district} - {districtSearch.length} Districts</u></b></Text>
-                        {districtSearch.map((districts) => {
+                        {/* {showDistrictList ?
+                        <Text><b><u>{district} - {districtSearch.length} Districts</u></b></Text> 
+                        : 
+                        <Text><b><u>{school} - {schoolSearch.length} Schools</u></b></Text>
+                        } */}
+                        
+                        {showDistrictList &&
+                            districtSearch.map((districts) => {
                             // console.log('In districtSearch map', districts);
-                            return (
-                                <List spacing={3}>
-                                    <ListItem
-                                        key={districts.OBJECTID}
-                                        cursor="pointer"
-                                        _hover={{fontWeight: "900"}}
-                                        // onClick={(e) => handleInfo(districts)}
-                                    >
-                                        <ListIcon as={Search2Icon} color="blue.500" />
-                                        {districts.NAME} - {districts.LCITY}, {districts.LSTATE}
-                                    </ListItem>
-                                </List>
-                            )
-                        })}
+                                return (
+                                    <List spacing={3}>
+                                        <ListItem
+                                            key={districts.OBJECTID}
+                                            cursor="pointer"
+                                            _hover={{fontWeight: "900"}}
+                                            // onClick={(e) => handleInfo(districts)}
+                                        >
+                                            <ListIcon as={Search2Icon} color="blue.500" />
+                                            {districts.NAME} - {districts.LCITY}, {districts.LSTATE}
+                                        </ListItem>
+                                    </List>
+                                )
+                            }) 
+                        }
                         </> 
                     : 
                        <></>
