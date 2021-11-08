@@ -38,7 +38,7 @@ const Home: React.FC = () => {
     // function to handle district and districtSchools search queries. 
     const handleDistrict= async () => {
         console.log('in handleDistrict', district, districtSchool);
-        setSearching(true)
+        
         const districtSearch = await searchSchoolDistricts(district)
         setDistrictSearch(districtSearch)
         console.log("District(s):", districtSearch);
@@ -72,6 +72,7 @@ const Home: React.FC = () => {
         e.preventDefault();
         console.log('in validateDistrict', district);
         setUserSearch(true);
+        setSearching(true)
         handleDistrict();
         handleSchool();
     }
@@ -79,7 +80,7 @@ const Home: React.FC = () => {
     return (
         <Center padding="100px" > {/* Removed height="90vh" to allow for scrolling */}
             <ScaleFade initialScale={0.9} in={true}>
-                <Card variant="rounded" borderColor="blue">
+                <Card variant="rounded" borderColor="green.300">
                     <Heading>School Data Finder</Heading>
 
                     <Divider margin={4} />
@@ -91,14 +92,14 @@ const Home: React.FC = () => {
                     <form onSubmit={validate}>
                         <Stack spacing={3}>
                             {/* Helper Text */}
-                            <Text>
-                                Enter a <b>District</b> and click <b>Search!</b>
+                            <Text textAlign="center">
+                                Enter a <b>District</b>
                             </Text>
                             {/* District Input*/}
                             <InputGroup>
                                 <InputLeftElement
                                 pointerEvents="none"
-                                children={<Search2Icon color="black.300" />}
+                                children={<Search2Icon color="blue.500" />}
                                 />
                                 <Input 
                                 borderRadius="20"
@@ -110,13 +111,20 @@ const Home: React.FC = () => {
                             </InputGroup>
                             {/* Search District Button */}
                             <Button 
-                                colorScheme="purple"
+                                colorScheme="blue"
                                 boxShadow="md" 
                                 variant="solid"
                                 type="submit"
                                 isFullWidth>
                                 Search
                             </Button>
+                            <Text textAlign="center">
+                                {searching ? 
+                                <Spinner /> 
+                                : 
+                                <Text textAlign="center">{districtSearch.length} Districts</Text>
+                                }
+                            </Text>
                         </Stack>
                     </form>
 
@@ -128,43 +136,51 @@ const Home: React.FC = () => {
                     <form onSubmit={validate}>
                         <Stack spacing={3}>
                             {/* Helper Text */}
-                            <Text>
-                                Enter a <b>School</b> and click <b>Search!</b>
+                            <Text textAlign="center">
+                                Enter a <b>School</b>
                             </Text>
                             {/* School Input*/}
                             <InputGroup>
                                 <InputLeftElement
-                                children={<Search2Icon color="black.300" />}
+                                    children={<Search2Icon color="yellow.500" />}
                                 />
                                 <Input 
-                                focusBorderColor="green.300"
-                                borderRadius="20"
-                                boxShadow="base"
-                                placeholder="School"
-                                isRequired
-                                onChange={(e) => setSchool(e.target.value)}  
+                                    focusBorderColor="yellow.500"
+                                    borderRadius="20"
+                                    boxShadow="base"
+                                    placeholder="School"
+                                    isRequired
+                                    onChange={(e) => setSchool(e.target.value)}  
                                 />
                             </InputGroup>
                             {/* Search School Button */}
                             <Button 
-                                colorScheme="purple"
+                                colorScheme="yellow"
                                 boxShadow="md" 
                                 variant="solid"
                                 type="submit">
-                                Search School
+                                Search
                             </Button>
+                            <Text textAlign="center">
+                                {searching ? 
+                                <Spinner /> 
+                                : 
+                                <Text>{schoolSearch.length} Schools</Text>
+                                }
+                            </Text>
                         </Stack>
                     </form>
                     </HStack>
 
                     <Divider margin={4} />
 
-                    {/* District search results. If there more than 100 results, only the number will be displayed */}
+                    {/* UserSearch checks if the user has entered search query before mapping. This prevents mapping all unfiltered results on page load.
+                    If user has not entered a search query, the number of total districts is displayed*/}
                     {userSearch ?
                         <>
-                        <Text><b>{districtSearch.length} Districts</b></Text>
+                        <Text><b><u>{district} - {districtSearch.length} Districts</u></b></Text>
                         {districtSearch.map((districts) => {
-                            console.log('In districtSearch map', districts);
+                            // console.log('In districtSearch map', districts);
                             return (
                                 <List spacing={3}>
                                     <ListItem
@@ -173,7 +189,7 @@ const Home: React.FC = () => {
                                         _hover={{fontWeight: "900"}}
                                         // onClick={(e) => handleInfo(districts)}
                                     >
-                                        <ListIcon as={Search2Icon} color="green.500" />
+                                        <ListIcon as={Search2Icon} color="blue.500" />
                                         {districts.NAME} - {districts.LCITY}, {districts.LSTATE}
                                     </ListItem>
                                 </List>
@@ -181,12 +197,7 @@ const Home: React.FC = () => {
                         })}
                         </> 
                     : 
-                        <Text>
-                            {searching ? <Spinner /> : <></>}< br />
-                            {districtSearch.length} Districts<br />
-                            {districtSchoolSearch.length} District Schools<br />
-                            {schoolSearch.length} Schools<br />
-                        </Text>
+                       <></>
                     }
                 </Card>
             </ScaleFade>
