@@ -22,23 +22,25 @@ import {
 } from "@chakra-ui/react"
 import { Search2Icon } from '@chakra-ui/icons'
 import { Card } from '@components/design/Card'
-import { searchSchoolDistricts, searchSchools, NCESDistrictFeatureAttributes, NCESSchoolFeatureAttributes } from "@utils/nces"
-import Logo from '../logo192.png';
-
+import { searchSchools, NCESSchoolFeatureAttributes } from "@utils/nces"
 
 const SchoolList: React.FC = () => {
+    // Searching state operates spinner
     const [searching, setSearching] = React.useState(false);
+    // userSearch initiates displaying result
     const [userSearch, setUserSearch] = React.useState(false);
+    // schoolSearch holds search results list
     const [schoolSearch, setSchoolSearch] = React.useState<NCESSchoolFeatureAttributes[]>([]);
+    // school holds input from school form and transfers to schoolQuery
     const [school, setSchool] = React.useState('');
     const [schoolQuery, setSchoolQuery] = React.useState('');
 
-     // Validate inputs
+     // Validate School input
      const validateSchool = (e: React.FormEvent<HTMLFormElement>) => {
+        // console.log('in validateSchool', school);
         e.preventDefault();
-        console.log('in validateSchool', school);
-        // setUserSearch(true);
-        // setSearching(true)
+        setUserSearch(true);
+        setSearching(true)
         handleSchool();
     }
 
@@ -46,18 +48,16 @@ const SchoolList: React.FC = () => {
      const handleSchool = async () => {
         // console.log('in handleSchool', school);
         const schoolSearch = await searchSchools(school)
-        setSchoolSearch(schoolSearch)
-       
         console.log("School:", schoolSearch);
+        setSchoolSearch(schoolSearch)
+        setSchoolQuery(school)
         setSearching(false)
-       
         //Clear form
         setSchool('')
     }
 
-     // useEffect is listening, ready to call search function
-     useEffect(() => {
-       
+    // useEffect is listening, and calls handleSchool on page load
+    useEffect(() => {
         handleSchool();
     }, [])
 
@@ -93,6 +93,7 @@ const SchoolList: React.FC = () => {
                     type="submit">
                     Search
                 </Button>
+                {/* Displays spinner if searching, or number of search results */}
                 <Text textAlign="center">
                     {searching ? 
                     <Spinner /> 
@@ -102,20 +103,24 @@ const SchoolList: React.FC = () => {
                 </Text>
             </Stack>
         </form>
+        
+        <Divider margin={3} />
 
+        {/* When userSearch is true, display search results */}
         {userSearch ?
             <>
             <Text><b><u>"{schoolQuery}" - {schoolSearch.length}</u></b></Text>
-            
+            {/* < 60 conditional prevents looping through massive lists. Better user experience */}
             {schoolSearch.length < 60 ? 
                 schoolSearch.map((schools) => {
                 // console.log('In districtSearch map', districts);
                 return (
+                    // School List
                     <List spacing={3}>
                         <ListItem
                             key={schools.NCESSCH}
                             cursor="pointer"
-                            _hover={{fontWeight: "900", color:"yellow.500"}}
+                            _hover={{fontWeight: "900", color:"yellow.700"}}
                             // onClick={(e) => handleInfo(districts)}
                         >
                         <ListIcon as={Search2Icon} color="yellow.500" />
