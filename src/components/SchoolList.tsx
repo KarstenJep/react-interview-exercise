@@ -93,7 +93,7 @@ const SchoolList: React.FC = () => {
                     type="submit">
                     Search
                 </Button>
-                {/* Displays spinner if searching, or number of search results */}
+                {/* Renders spinner if searching, or number of search results */}
                 <Text textAlign="center">
                     {searching ? 
                     <Spinner /> 
@@ -128,14 +128,14 @@ const SchoolList: React.FC = () => {
                     </ListItem>
                 </List>
                 )
-            }) 
+            }) // end .map
             :
             <Text>Too many results. Please narrow your search!</Text>
-            }
-        </>
+            }  
+        </> 
         :
-        <></>
-        }
+        <></> 
+        } 
     </>
     );
 }

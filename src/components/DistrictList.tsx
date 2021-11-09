@@ -23,23 +23,26 @@ import {
 } from "@chakra-ui/react"
 import { Search2Icon } from '@chakra-ui/icons'
 import { Card } from '@components/design/Card'
-import { searchSchoolDistricts, searchSchools, NCESDistrictFeatureAttributes, NCESSchoolFeatureAttributes } from "@utils/nces"
-import Logo from '../logo192.png';
+import { searchSchoolDistricts, NCESDistrictFeatureAttributes } from "@utils/nces"
 
 const DistrictList: React.FC = () => {
-
+    // Searching state operates spinner
     const [searching, setSearching] = React.useState(false);
+    // userSearch initiates displaying result
     const [userSearch, setUserSearch] = React.useState(false);
+    // districtSearch holds search results list
     const [districtSearch, setDistrictSearch] = React.useState<NCESDistrictFeatureAttributes[]>([]);
-    // const [districtSchoolSearch, setDistrictSchoolSearch] = React.useState<NCESSchoolFeatureAttributes[]>([]);
+    // district holds input from district form and transfers to districtQuery
     const [district, setDistrict] = React.useState('');
-    const [searchQuery, setSearchQuery] = React.useState('');
+    const [districtQuery, setDistrictQuery] = React.useState('');
+    // TODO: Add feature to search schools within a district
+    // const [districtSchoolSearch, setDistrictSchoolSearch] = React.useState<NCESSchoolFeatureAttributes[]>([]);
     // const [districtSchool, setDistrictSchool] = React.useState('');
 
-    // Validate inputs
+    // Validate District input
     const validateDistrict = (e: React.FormEvent<HTMLFormElement>) => {
+        // console.log('in validateDistrict', district);
         e.preventDefault();
-        console.log('in validateDistrict', district);
         setUserSearch(true);
         setSearching(true);
         handleDistrict();
@@ -49,18 +52,19 @@ const DistrictList: React.FC = () => {
     const handleDistrict= async () => {
         // console.log('in handleDistrict', district, districtSchool);
         const districtSearch = await searchSchoolDistricts(district)
-        setDistrictSearch(districtSearch)
-        setSearchQuery(district)
         console.log("District(s):", districtSearch);
+        setDistrictSearch(districtSearch)
+        setDistrictQuery(district)
+        setSearching(false)
+        // TODO: Add feature to search schools within a district
         // const districtSchoolSearch = await searchSchools(districtSchool, districtSearch[1].LEAID)
         // setDistrictSchoolSearch(districtSchoolSearch)
         // console.log("District School(s):", districtSchoolSearch);
-        setSearching(false)
         //Clear form
         setDistrict('')
     }
 
-    // useEffect is listening, ready to call search function
+    // useEffect is listening, and calls handleDistrict on page load
     useEffect(() => {
         handleDistrict();
     }, [])
@@ -77,16 +81,16 @@ const DistrictList: React.FC = () => {
                 {/* District Input*/}
                 <InputGroup>
                     <InputLeftElement
-                    pointerEvents="none"
-                    children={<Search2Icon color="blue.500" />}
+                        pointerEvents="none"
+                        children={<Search2Icon color="blue.500" />}
                     />
                     <Input 
-                    borderRadius="20"
-                    boxShadow="base"
-                    placeholder="District"
-                    value={district}
-                    isRequired
-                    onChange={(e) => setDistrict(e.target.value)} 
+                        borderRadius="20"
+                        boxShadow="base"
+                        placeholder="District"
+                        value={district}
+                        isRequired
+                        onChange={(e) => setDistrict(e.target.value)} 
                     />
                 </InputGroup>
                 {/* Search District Button */}
@@ -98,6 +102,7 @@ const DistrictList: React.FC = () => {
                     isFullWidth>
                     Search
                 </Button>
+                {/* Renders spinner if searching, or number of search results */}
                 <Text textAlign="center">
                     {searching ? 
                     <Spinner /> 
@@ -112,23 +117,24 @@ const DistrictList: React.FC = () => {
 
         {userSearch ?
             <>
-            <Text><b><u>"{searchQuery}" - {districtSearch.length}</u></b></Text>
-            
+            <Text><b><u>"{districtQuery}" - {districtSearch.length}</u></b></Text>
+            {/* < 60 conditional prevents looping through massive lists. Better user experience */}
             {districtSearch.length < 60 ? 
                 districtSearch.map((districts) => {
                 // console.log('In districtList .map', districts)
                 return (
-                <List spacing={3}>
-                    <ListItem
-                        key={districts.OBJECTID}
-                        cursor="pointer"
-                        _hover={{fontWeight: "900", color: "blue.700"}}
-                        // onClick={(e) => handleInfo(districts)}
-                    >
-                        <ListIcon as={Search2Icon} color="blue.500" />
-                        {districts.NAME} - {districts.LCITY}, {districts.LSTATE}
-                    </ListItem>
-                </List>
+                    // District List
+                    <List spacing={3}>
+                        <ListItem
+                            key={districts.OBJECTID}
+                            cursor="pointer"
+                            _hover={{fontWeight: "900", color: "blue.700"}}
+                            // onClick={(e) => handleInfo(districts)}
+                        >
+                            <ListIcon as={Search2Icon} color="blue.500" />
+                            {districts.NAME} - {districts.LCITY}, {districts.LSTATE}
+                        </ListItem>
+                    </List>
                 )
             })
             :
