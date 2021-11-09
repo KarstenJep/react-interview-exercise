@@ -2,27 +2,30 @@ import React, { useEffect } from "react"
 import {
     Button,
     Center,
-    Heading,
     Text,
-    Icon,
     Input,
-    ScaleFade,
-    OrderedList,
     Divider,
     ListItem,
     Spinner,
     InputGroup, // Some Chakra components that might be usefull
     InputLeftElement,
     Stack,
-    HStack,
-    Box,
     List,
     ListIcon,
-    VStack,
-    InputRightAddon,
+    Popover,
+    PopoverTrigger,
+    PopoverContent,
+    PopoverHeader,
+    PopoverBody,
+    PopoverArrow,
+    PopoverCloseButton,
+    Portal,
+    Table,
+    Tbody,
+    Tr,
+    Td,
 } from "@chakra-ui/react"
 import { Search2Icon } from '@chakra-ui/icons'
-import { Card } from '@components/design/Card'
 import { searchSchoolDistricts, NCESDistrictFeatureAttributes } from "@utils/nces"
 
 const DistrictList: React.FC = () => {
@@ -38,6 +41,7 @@ const DistrictList: React.FC = () => {
     // TODO: Add feature to search schools within a district
     // const [districtSchoolSearch, setDistrictSchoolSearch] = React.useState<NCESSchoolFeatureAttributes[]>([]);
     // const [districtSchool, setDistrictSchool] = React.useState('');
+    const initRef = React.useRef()
 
     // Validate District input
     const validateDistrict = (e: React.FormEvent<HTMLFormElement>) => {
@@ -125,15 +129,109 @@ const DistrictList: React.FC = () => {
                 return (
                     // District List
                     <List spacing={3}>
-                        <ListItem
-                            key={districts.OBJECTID}
-                            cursor="pointer"
-                            _hover={{fontWeight: "900", color: "blue.700"}}
-                            // onClick={(e) => handleInfo(districts)}
-                        >
-                            <ListIcon as={Search2Icon} color="blue.500" />
-                            {districts.NAME} - {districts.LCITY}, {districts.LSTATE}
-                        </ListItem>
+                        <Popover>
+                            <PopoverTrigger>
+                                <ListItem
+                                    key={districts.OBJECTID}
+                                    cursor="pointer"
+                                    _hover={{fontWeight: "900", color: "blue.700"}}
+                                >
+                                    <ListIcon as={Search2Icon} color="blue.500" />
+                                    {' '}{districts.NAME} - {districts.LCITY}, {districts.LSTATE}
+                                </ListItem>
+                            </PopoverTrigger>
+                            <Portal>
+                                {/* PopOver */}
+                                <PopoverContent>
+                                    <PopoverArrow />
+                                    <PopoverHeader>
+                                        <Center>
+                                            <b>{districts.NAME}</b>
+                                        </Center>
+                                    </PopoverHeader>
+                                    <PopoverCloseButton />
+                                    <PopoverBody>
+                                         {/* Table Data */}
+                                        <Table variant="simple">
+                                            <Tbody>
+                                                <Tr>
+                                                    <Td>Address</Td>
+                                                    <Td>{districts.LSTREE}</Td>
+                                                </Tr>
+                                                <Tr>
+                                                    <Td>City</Td>
+                                                    <Td>{districts.LCITY}</Td>
+                                                </Tr>
+                                                <Tr>
+                                                    <Td>State</Td>
+                                                    <Td>{districts.LSTATE}</Td>
+                                                </Tr>
+                                                <Tr>
+                                                    <Td>Zip</Td>
+                                                    <Td>{districts.LZIP}</Td>
+                                                </Tr>
+                                                <Tr>
+                                                    <Td>County</Td>
+                                                    <Td>{districts.NMCNTY15}</Td>
+                                                </Tr>
+                                                <Tr>
+                                                    <Td>CBSA15</Td>
+                                                    <Td>{districts.CBSA15}</Td>
+                                                </Tr>
+                                                <Tr>
+                                                    <Td>CBSATYPE15</Td>
+                                                    <Td>{districts.CBSATYPE15}</Td>
+                                                </Tr> 
+                                                <Tr>
+                                                    <Td>CD15</Td>
+                                                    <Td>{districts.CD15}</Td>
+                                                </Tr>
+                                                <Tr>
+                                                    <Td>CSA15</Td>
+                                                    <Td>{districts.CSA15}</Td>
+                                                </Tr>
+                                                <Tr>
+                                                    <Td>LEAID</Td>
+                                                    <Td>{districts.LEAID}</Td>
+                                                </Tr>
+                                                <Tr>
+                                                    <Td>NECTA15</Td>
+                                                    <Td>{districts.NECTA15}</Td>
+                                                </Tr>
+                                                <Tr>
+                                                    <Td>NMCBSA15</Td>
+                                                    <Td>{districts.NMCBSA15}</Td>
+                                                </Tr>
+                                                <Tr>
+                                                    <Td>NMCSA15</Td>
+                                                    <Td>{districts.NMCSA15}</Td>
+                                                </Tr>
+                                                <Tr>
+                                                    <Td>NMNECTA15</Td>
+                                                    <Td>{districts.NMNECTA15}</Td>
+                                                </Tr>
+                                                <Tr>
+                                                    <Td>OPSTFIPS</Td>
+                                                    <Td>{districts.OPSTFIPS}</Td>
+                                                </Tr>
+                                                <Tr>
+                                                    <Td>SLDL15</Td>
+                                                    <Td>{districts.SLDL15}</Td>
+                                                </Tr>
+                                                <Tr>
+                                                    <Td>SLDU15</Td>
+                                                    <Td>{districts.SLDU15}</Td>
+                                                </Tr>
+                                                <Tr>
+                                                    <Td>STFIP15</Td>
+                                                    <Td>{districts.STFIP15}</Td>
+                                                </Tr>
+                                            </Tbody>
+                                        </Table>
+                                    </PopoverBody>
+                                </PopoverContent>
+                            </Portal>
+                        </Popover>
                     </List>
                 )
             })
