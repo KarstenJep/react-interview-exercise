@@ -2,23 +2,28 @@ import React, { useEffect } from "react"
 import {
     Button,
     Center,
-    Heading,
     Text,
-    Icon,
     Input,
-    ScaleFade,
-    OrderedList,
     Divider,
     ListItem,
     Spinner,
     InputGroup, // Some Chakra components that might be usefull
     InputLeftElement,
     Stack,
-    HStack,
     List,
     ListIcon,
-    VStack,
-    InputRightAddon,
+    Popover,
+    PopoverTrigger,
+    PopoverContent,
+    PopoverHeader,
+    PopoverBody,
+    PopoverArrow,
+    PopoverCloseButton,
+    Portal,
+    Table,
+    Tbody,
+    Tr,
+    Td,
 } from "@chakra-ui/react"
 import { Search2Icon } from '@chakra-ui/icons'
 import { Card } from '@components/design/Card'
@@ -117,15 +122,81 @@ const SchoolList: React.FC = () => {
                 return (
                     // School List
                     <List spacing={3}>
-                        <ListItem
-                            key={schools.NCESSCH}
-                            cursor="pointer"
-                            _hover={{fontWeight: "900", color:"yellow.700"}}
-                            // onClick={(e) => handleInfo(districts)}
-                        >
-                        <ListIcon as={Search2Icon} color="yellow.500" />
-                        {schools.NAME} - {schools.CITY}, {schools.STATE}
-                    </ListItem>
+                        <Popover>
+                            <PopoverTrigger>
+                                <ListItem
+                                    key={schools.FID}
+                                    cursor="pointer"
+                                    _hover={{fontWeight: "900", color:"yellow.700"}}
+                                >
+                                <ListIcon as={Search2Icon} color="yellow.500" />
+                                {' '}{schools.NAME} - {schools.CITY}, {schools.STATE}
+                            </ListItem>
+                            </PopoverTrigger>
+                            <Portal>
+                                {/* PopOver */}
+                                <PopoverContent>
+                                    <PopoverArrow />
+                                    <PopoverHeader>
+                                        <Center>
+                                            <b>{schools.NAME}</b>
+                                        </Center>
+                                    </PopoverHeader>
+                                    <PopoverCloseButton />
+                                    <PopoverBody>
+                                        {/* Table Data */}
+                                        <Table variant="simple">
+                                            <Tbody>
+                                                <Tr>
+                                                    <Td>Address</Td>
+                                                    <Td>{schools.STREET}</Td>
+                                                </Tr>
+                                                <Tr>
+                                                    <Td>City</Td>
+                                                    <Td>{schools.CITY}</Td>
+                                                </Tr>
+                                                <Tr>
+                                                    <Td>State</Td>
+                                                    <Td>{schools.STATE}</Td>
+                                                </Tr>
+                                                <Tr>
+                                                    <Td>Zip</Td>
+                                                    <Td>{schools.ZIP}</Td>
+                                                </Tr>
+                                                <Tr>
+                                                    <Td>County</Td>
+                                                    <Td>{schools.NMCNTY}</Td>
+                                                </Tr>
+                                                <Tr>
+                                                    <Td>FID</Td>
+                                                    <Td>{schools.FID}</Td>
+                                                </Tr>
+                                                <Tr>
+                                                    <Td>LEAID</Td>
+                                                    <Td>{schools.LEAID}</Td>
+                                                </Tr>
+                                                <Tr>
+                                                    <Td>LOCALE</Td>
+                                                    <Td>{schools.LOCALE}</Td>
+                                                </Tr>
+                                                <Tr>
+                                                    <Td>NCESSCH</Td>
+                                                    <Td>{schools.NCESSCH}</Td>
+                                                </Tr>
+                                                <Tr>
+                                                    <Td>OPSTFIPS</Td>
+                                                    <Td>{schools.OPSTFIPS}</Td>
+                                                </Tr>
+                                                <Tr>
+                                                    <Td>OPSTFIPS</Td>
+                                                    <Td>{schools.OPSTFIPS}</Td>
+                                                </Tr>
+                                            </Tbody>
+                                        </Table>
+                                    </PopoverBody>
+                                </PopoverContent>
+                            </Portal>
+                        </Popover>
                 </List>
                 )
             }) // end .map
