@@ -21,11 +21,11 @@ const Home: React.FC = () => {
     return (
         <Center padding="100px" > {/* Removed height="90vh" to allow for scrolling */}
             <ScaleFade initialScale={0.9} in={true}>
-                <Card variant="rounded" borderColor="blue.300">
+                <Card variant="rounded" borderColor={schoolForm ? "blue.300" : "yellow.500" }>
                     {/* Using state to toggle between the School Form and District Form */}
                     {schoolForm ? 
                         <>
-                        <Heading color="yellow.800">School Data Finder</Heading>
+                        <Heading color="yellow.500">School Data Finder</Heading>
                         <Divider margin={3} />
                         <HStack spacing={2}>
                             {/* District Btn */}
@@ -51,7 +51,7 @@ const Home: React.FC = () => {
                         </>
                         :
                         <>
-                        <Heading color="blue.700">District Data Finder</Heading>
+                        <Heading color="blue.500">District Data Finder</Heading>
                         <Divider margin={3} />
                         <HStack spacing={2}>
                             {/* District Btn */}
