@@ -31,6 +31,7 @@ const SchoolList: React.FC = () => {
     const [userSearch, setUserSearch] = React.useState(false);
     const [schoolSearch, setSchoolSearch] = React.useState<NCESSchoolFeatureAttributes[]>([]);
     const [school, setSchool] = React.useState('');
+    const [schoolQuery, setSchoolQuery] = React.useState('');
 
      // Validate inputs
      const validateSchool = (e: React.FormEvent<HTMLFormElement>) => {
@@ -61,8 +62,8 @@ const SchoolList: React.FC = () => {
     }, [])
 
     return (
-
-        // School Form
+        <>
+        {/* School Form */}
         <form onSubmit={validateSchool}>
             <Stack spacing={3}>
                 {/* Helper Text */}
@@ -101,6 +102,36 @@ const SchoolList: React.FC = () => {
                 </Text>
             </Stack>
         </form>
+
+        {userSearch ?
+            <>
+            <Text><b><u>"{schoolQuery}" - {schoolSearch.length}</u></b></Text>
+            
+            {schoolSearch.length < 60 ? 
+                schoolSearch.map((schools) => {
+                // console.log('In districtSearch map', districts);
+                return (
+                    <List spacing={3}>
+                        <ListItem
+                            key={schools.NCESSCH}
+                            cursor="pointer"
+                            _hover={{fontWeight: "900", color:"yellow.500"}}
+                            // onClick={(e) => handleInfo(districts)}
+                        >
+                        <ListIcon as={Search2Icon} color="yellow.500" />
+                        {schools.NAME} - {schools.CITY}, {schools.STATE}
+                    </ListItem>
+                </List>
+                )
+            }) 
+            :
+            <Text>Too many results. Please narrow your search!</Text>
+            }
+        </>
+        :
+        <></>
+        }
+    </>
     );
 }
 
