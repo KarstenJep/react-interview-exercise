@@ -1,25 +1,11 @@
-import React, { useEffect } from "react"
+import React from "react"
 import {
     Button,
     Center,
     Heading,
-    Text,
-    Icon,
-    Input,
     ScaleFade,
-    OrderedList,
     Divider,
-    ListItem,
-    Spinner,
-    InputGroup, // Some Chakra components that might be usefull
-    InputLeftElement,
-    Stack,
     HStack,
-    Box,
-    List,
-    ListIcon,
-    VStack,
-    InputRightAddon,
 } from "@chakra-ui/react"
 import { Card } from '@components/design/Card'
 import Logo from '../logo192.png';

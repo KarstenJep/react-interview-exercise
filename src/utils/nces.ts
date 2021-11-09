@@ -12,7 +12,8 @@ export interface NCESSchoolFeatureAttributes {
     NMCNTY?: string,
     LOCALE?: string,
     LAT?: number,
-    LON?: number
+    LON?: number,
+    FID?: number //Added FID to use as unique key prop when mapping
 }
 
 interface NCESSchoolFeature {

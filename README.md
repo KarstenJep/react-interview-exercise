@@ -28,9 +28,11 @@ A data finder/search engine was needed to search school districts--and schools--
  3. User can select or school or district to view information/data
 
  ## Next Steps
- 1. Add ability to search for schools within a district
- 2. Incorporate google maps API and utilize lat/long data
- 3. Improve responsiveness between mobile and tablet devices
+ 1. Improve readability of data tables
+ 2. Add ability to search for schools within a district
+ 3. Break up components into smaller sizes
+ 4. Incorporate google maps API and utilize lat/long data
+ 5. Improve responsiveness between mobile and tablet devices
 
  ## Acknowledgement
 Thanks to CharacterStrong for the opportunity to build this application. It was a lot of fun!

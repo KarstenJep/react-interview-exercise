@@ -151,7 +151,7 @@ const DistrictList: React.FC = () => {
                                     </PopoverHeader>
                                     <PopoverCloseButton />
                                     <PopoverBody>
-                                         {/* Table Data */}
+                                        {/* Table Data */}
                                         <Table variant="simple">
                                             <Tbody>
                                                 <Tr>
